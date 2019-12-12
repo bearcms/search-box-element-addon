@@ -1,7 +1,7 @@
 {
     "id": "bearcms/search-box-element-addon",
     "name": "Search element",
-    "description": "",
+    "description": "Add search functionality to your website with this addon. You will be able to add a search box element in the content zones of your website. Every change you make will be visible in the search results in a couple of minutes.",
     "author": {
         "name": "Bear CMS",
         "email": "support@bearcms.com",
