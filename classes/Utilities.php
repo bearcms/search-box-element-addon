@@ -140,10 +140,14 @@ class Utilities
      * @param string $query
      * @param integer $limit
      * @param integer $page
-     * @return array
+     * @return array|null NULL - the index is not ready
      */
-    static function search(string $query, int $limit = 20, int $page = 1): array
+    static function search(string $query, int $limit = 20, int $page = 1): ?array
     {
+        if (!self::dataExists()) {
+            self::addIndexUpdateTask();
+            return null;
+        }
         $query = trim($query);
         if (strlen($query) === 0) {
             return [];
@@ -151,7 +155,7 @@ class Utilities
         $app = App::get();
         $items = $app->dataIndex->getList('bearcms-search');
         if (count($items) === 0) {
-            return [];
+            return null;
         }
 
         $crop = function ($text, $length) {
@@ -244,6 +248,16 @@ class Utilities
 
     /**
      * 
+     * @return boolean
+     */
+    static function dataExists(): bool
+    {
+        $app = App::get();
+        return $app->data->exists(self::getDataKey());
+    }
+
+    /**
+     * 
      * @return string
      */
     static function getDataKey(): string
@@ -272,5 +286,14 @@ class Utilities
         $httpCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
         return ['status' => (int) $httpCode, 'content' => (string) $content];
+    }
+
+    static function addIndexUpdateTask(): void
+    {
+        $app = App::get();
+        $app->tasks->add('bearcms-search-update-index', null, [
+            'id' => 'bearcms-search-update-index',
+            'ignoreIfExists' => true
+        ]);
     }
 }

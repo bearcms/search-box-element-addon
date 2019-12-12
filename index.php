@@ -92,7 +92,9 @@ $app->bearCMS->addons
                         $content .= '</head>';
                         $content .= '<body>';
                         $content .= '<bearcms-heading-element text="' . htmlentities($title) . '" size="large"/>';
-                        if (!empty($results)) {
+                        if ($results === null) {
+                            $textContent = __('bearcms/search-box-element-addon/building-search-index');
+                        } elseif (!empty($results)) {
                             $resultsHTML = [];
                             foreach ($results as $result) {
                                 $resultsHTML[] = '<a href="' . htmlentities($result['url']) . '" >' . htmlspecialchars($result['title']) . '</a><br>' . htmlspecialchars($result['content']);
@@ -127,11 +129,8 @@ $app->bearCMS->addons
 
             if ($enableService) {
                 $app->bearCMS
-                    ->addEventListener('internalSitemapChange', function () use ($app) {
-                        $app->tasks->add('bearcms-search-update-index', null, [
-                            'id' => 'bearcms-search-update-index',
-                            'ignoreIfExists' => true
-                        ]);
+                    ->addEventListener('internalSitemapChange', function () {
+                        Utilities::addIndexUpdateTask();
                     });
             }
         };

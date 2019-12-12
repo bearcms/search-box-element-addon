@@ -14,4 +14,5 @@ return [
     'bearcms/search-box-element-addon/ButtonTitle' => 'Search',
     'bearcms/search-box-element-addon/page-title' => 'Search results for %s',
     'bearcms/search-box-element-addon/no-results-found' => 'No results found while searching for %s',
+    'bearcms/search-box-element-addon/building-search-index' => 'The search is currently not available. Plaese try again in few minutes.'
 ];
