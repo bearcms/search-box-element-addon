@@ -120,11 +120,11 @@ $app->bearCMS->addons
                     }
                     Utilities::updateIndex();
                 })
-                ->define('bearcms-search-update-page-index', function (string $url) use ($enableService) {
+                ->define('bearcms-search-update-page-index', function (string $path) use ($enableService) {
                     if (!$enableService) {
                         return;
                     }
-                    Utilities::updatePageIndex($url);
+                    Utilities::updatePageIndex($path);
                 });;
 
             if ($enableService) {
