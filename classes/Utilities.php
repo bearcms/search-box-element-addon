@@ -27,7 +27,7 @@ class Utilities
     {
         $app = App::get();
 
-        $urls = null;
+        $paths = null;
         $robotsURL = $app->urls->get('/robots.txt');
         $result = self::makeRequest($robotsURL);
         if ($result['status'] === 200) {
@@ -47,7 +47,7 @@ class Utilities
                         $dom->loadXML($result['content']);
                         $elements = $dom->getElementsByTagName('url');
                         if ($elements->length > 0) {
-                            $urls = [];
+                            $paths = [];
                             foreach ($elements as $element) {
                                 $lastModDate = '';
                                 $lastmodElements = $element->getElementsByTagName('lastmod');
@@ -56,32 +56,34 @@ class Utilities
                                 }
                                 $locationElements = $element->getElementsByTagName('loc');
                                 if ($locationElements->length === 1) {
-                                    $urls[$locationElements->item(0)->nodeValue] = $lastModDate;
+                                    $locationPath = str_replace($app->request->base, '', $locationElements->item(0)->nodeValue);
+                                    $paths[$locationPath] = $lastModDate;
                                 }
                             }
                         }
-                    } catch (\Exception $e) { }
+                    } catch (\Exception $e) {
+                    }
                 }
             }
         }
-        if ($urls === null) {
+        if ($paths === null) {
             return;
         }
 
         $data = self::getData();
         $hasChange = false;
-        $urlsToRemove = array_diff_key($data, $urls);
-        if (!empty($urlsToRemove)) {
+        $pathsToRemove = array_diff_key($data, $paths);
+        if (!empty($pathsToRemove)) {
             $hasChange = true;
-            $app->dataIndex->deleteMultiple('bearcms-search', $urlsToRemove);
+            $app->dataIndex->deleteMultiple('bearcms-search', $pathsToRemove);
         }
         $tasksData = [];
-        foreach ($urls as $url => $lastModDate) {
-            if (!isset($data[$url]) || $data[$url] !== $lastModDate) {
-                $taskID = 'bearcms-search-update-page-index-' . md5($url);
+        foreach ($paths as $path => $lastModDate) {
+            if (!isset($data[$path]) || $data[$path] !== $lastModDate) {
+                $taskID = 'bearcms-search-update-page-index-' . md5($path);
                 $tasksData[] = [
                     'definitionID' => 'bearcms-search-update-page-index',
-                    'data' => $url,
+                    'data' => $path,
                     'options' => ['id' => $taskID, 'ignoreIfExists' => true]
                 ];
             }
@@ -91,23 +93,23 @@ class Utilities
             $app->tasks->addMultiple($tasksData);
         }
         if ($hasChange) {
-            self::setData($urls);
+            self::setData($paths);
         }
     }
 
     /**
      * 
-     * @param string $url
+     * @param string $path
      * @return void
      */
-    static function updatePageIndex(string $url): void
+    static function updatePageIndex(string $path): void
     {
         $data = self::getData();
-        if (!isset($data[$url])) {
+        if (!isset($data[$path])) {
             return;
         }
         $app = App::get();
-        $result = self::makeRequest($url);
+        $result = self::makeRequest($app->urls->get($path));
         if ($result['status'] === 200) {
             $dom = new HTML5DOMDocument();
             $dom->loadHTML($result['content'], HTML5DOMDocument::ALLOW_DUPLICATE_IDS);
@@ -127,11 +129,11 @@ class Utilities
                 $content = html_entity_decode($content);
             }
             $data = [
-                'url' => $url,
+                'path' => $path,
                 'title' => $title,
                 'content' => $content
             ];
-            $app->dataIndex->set('bearcms-search', $url, $data);
+            $app->dataIndex->set('bearcms-search', $path, $data);
         }
     }
 
@@ -178,7 +180,7 @@ class Utilities
         $index = 0;
         $resultsOrder = [];
         foreach ($items as $item) {
-            $url = $item->url;
+            $path = $item->path;
             $title = $item->title;
             $content = $item->content;
             $loweredTitle = mb_strtolower($title);
@@ -191,7 +193,7 @@ class Utilities
                 } else {
                     $content = $crop($content, $contentMaxLength);
                 }
-                $results[$index] = ['url' => $url, 'title' => $title, 'content' => $content];
+                $results[$index] = ['url' => $app->urls->get($path), 'title' => $title, 'content' => $content];
                 $value = sizeof(explode($loweredQuery, $loweredContent));
                 $value--;
                 $positionValue = sizeof(explode($loweredQuery, $loweredTitle, 2));
