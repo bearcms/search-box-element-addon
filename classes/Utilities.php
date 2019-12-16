@@ -130,8 +130,8 @@ class Utilities
             }
             $data = [
                 'path' => $path,
-                'title' => $title,
-                'content' => $content
+                'title' => trim($title),
+                'content' => trim($content)
             ];
             $app->dataIndex->set('bearcms-search', $path, $data);
         }

@@ -97,7 +97,7 @@ $app->bearCMS->addons
                         } elseif (!empty($results)) {
                             $resultsHTML = [];
                             foreach ($results as $result) {
-                                $resultsHTML[] = '<a href="' . htmlentities($result['url']) . '" >' . htmlspecialchars($result['title']) . '</a><br>' . htmlspecialchars($result['content']);
+                                $resultsHTML[] = '<a href="' . htmlentities($result['url']) . '" >' . (strlen($result['title']) === 0 ? htmlspecialchars(rawurldecode($result['url'])) : htmlspecialchars($result['title'])) . '</a><br>' . htmlspecialchars($result['content']);
                             }
                             $textContent = implode('<br><br>', $resultsHTML);
                         } else {
