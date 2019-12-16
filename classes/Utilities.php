@@ -180,7 +180,7 @@ class Utilities
         $index = 0;
         $resultsOrder = [];
         foreach ($items as $item) {
-            $path = $item->path;
+            $url = isset($item->path) ? $app->urls->get($item->path) : (isset($item->url) ? $item->url : $app->urls->get()); // compatibility with an old version
             $title = $item->title;
             $content = $item->content;
             $loweredTitle = mb_strtolower($title);
@@ -193,7 +193,7 @@ class Utilities
                 } else {
                     $content = $crop($content, $contentMaxLength);
                 }
-                $results[$index] = ['url' => $app->urls->get($path), 'title' => $title, 'content' => $content];
+                $results[$index] = ['url' => $url, 'title' => $title, 'content' => $content];
                 $value = sizeof(explode($loweredQuery, $loweredContent));
                 $value--;
                 $positionValue = sizeof(explode($loweredQuery, $loweredTitle, 2));
