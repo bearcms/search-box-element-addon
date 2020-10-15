@@ -109,7 +109,8 @@ class Utilities
             return;
         }
         $app = App::get();
-        $result = self::makeRequest($app->urls->get($path));
+        $url = $app->request->base . $path; // Dont use $app->urls->get() because the path may be encoded already
+        $result = self::makeRequest($url);
         if ($result['status'] === 200) {
             $dom = new HTML5DOMDocument();
             $dom->loadHTML($result['content'], HTML5DOMDocument::ALLOW_DUPLICATE_IDS);
@@ -180,7 +181,7 @@ class Utilities
         $index = 0;
         $resultsOrder = [];
         foreach ($items as $item) {
-            $url = isset($item->path) ? $app->urls->get($item->path) : (isset($item->url) ? $item->url : $app->urls->get()); // compatibility with an old version
+            $url = isset($item->path) ? $app->request->base . $item->path : (isset($item->url) ? $item->url : $app->request->base . '/'); // compatibility with an old version
             $title = $item->title;
             $content = $item->content;
             $loweredTitle = mb_strtolower($title);
