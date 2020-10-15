@@ -15,7 +15,7 @@ $app = App::get();
 $app->bearCMS->addons
     ->register('bearcms/search-box-element-addon', function (\BearCMS\Addons\Addon $addon) use ($app) {
         $addon->initialize = function (array $options = []) use ($app) {
-            $context = $app->contexts->get(__FILE__);
+            $context = $app->contexts->get(__DIR__);
 
             $enableService = isset($options['enableService']) ? $options['enableService'] : true;
 
