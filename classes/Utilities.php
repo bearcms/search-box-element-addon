@@ -72,7 +72,7 @@ class Utilities
 
         $data = self::getData();
         $hasChange = false;
-        $pathsToRemove = array_diff_key($data, $paths);
+        $pathsToRemove = array_diff($app->dataIndex->getKeys('bearcms-search'), array_keys($paths));
         if (!empty($pathsToRemove)) {
             $hasChange = true;
             $app->dataIndex->deleteMultiple('bearcms-search', $pathsToRemove);
