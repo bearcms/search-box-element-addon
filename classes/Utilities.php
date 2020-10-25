@@ -27,7 +27,7 @@ class Utilities
     {
         $app = App::get();
 
-        $paths = null;
+        $urls = null;
         $robotsURL = $app->urls->get('/robots.txt');
         $result = self::makeRequest($robotsURL);
         if ($result['status'] === 200) {
@@ -47,7 +47,7 @@ class Utilities
                         $dom->loadXML($result['content']);
                         $elements = $dom->getElementsByTagName('url');
                         if ($elements->length > 0) {
-                            $paths = [];
+                            $urls = [];
                             foreach ($elements as $element) {
                                 $lastModDate = '';
                                 $lastmodElements = $element->getElementsByTagName('lastmod');
@@ -56,8 +56,7 @@ class Utilities
                                 }
                                 $locationElements = $element->getElementsByTagName('loc');
                                 if ($locationElements->length === 1) {
-                                    $locationPath = str_replace($app->request->base, '', $locationElements->item(0)->nodeValue);
-                                    $paths[$locationPath] = $lastModDate;
+                                    $urls[$locationElements->item(0)->nodeValue] = $lastModDate;
                                 }
                             }
                         }
@@ -66,8 +65,20 @@ class Utilities
                 }
             }
         }
-        if ($paths === null) {
+        if ($urls === null) {
             return;
+        }
+        // Find the base URL. Dont get if from $app->request->base because the site may be served by multiple domains
+        $shortestURL = null;
+        foreach ($urls as $url => $lastModDate) {
+            if ($shortestURL === null || strlen($url) < strlen($shortestURL)) {
+                $shortestURL = $url;
+            }
+        }
+        $baseURL = rtrim($shortestURL, '\/');
+        $paths = [];
+        foreach ($urls as $url => $lastModDate) {
+            $paths[str_replace($baseURL, '', $url)] = $lastModDate;
         }
 
         $data = self::getData();
