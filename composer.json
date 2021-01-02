@@ -18,10 +18,10 @@
     "require": {
         "php": ">=7.1",
         "bearcms/bearframework-addon": "^1.10",
-        "bearframework/localization-addon": "0.2.*",
-        "bearframework/tasks-addon": "0.4.*",
+        "bearframework/localization-addon": "1.*",
+        "bearframework/tasks-addon": "1.*",
         "ivopetkov/html5-dom-document-php": "2.*",
-        "ivopetkov/data-index-bearframework-addon": "0.1.*"
+        "ivopetkov/data-index-bearframework-addon": "1.*"
     },
     "autoload": {
         "files": [
