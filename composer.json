@@ -23,6 +23,9 @@
         "ivopetkov/html5-dom-document-php": "2.*",
         "ivopetkov/data-index-bearframework-addon": "1.*"
     },
+    "require-dev": {
+        "bearcms/addon-tests": "1.*"
+    },
     "autoload": {
         "files": [
             "autoload.php"
