@@ -62,6 +62,26 @@ $app->bearCMS->addons
                 ]);
             };
 
+            $app->clientPackages
+                ->add('-bearcms-search', function (IvoPetkov\BearFrameworkAddons\ClientPackage $package) {
+                    //$js = file_get_contents(__DIR__ . '/dev/search.js');
+                    $js = include __DIR__ . '/assets/search.min.js.php';
+                    $package->addJSCode($js);
+                    $package->embedPackage('modalWindows');
+                });
+
+            $app->modalWindows
+                ->add('-bearcms-search-input', function () use ($app, $context) {
+                    $content = '<component src="form" filename="' . $context->dir . '/components/searchWindowForm.php" mode="preview"/>';
+                    $content = $app->components->process($content);
+                    $content = $app->clientPackages->process($content);
+                    return [
+                        'title' => __('bearcms/search-box-element-addon/ModalWindow/Title'),
+                        'content' => $content,
+                        'width' => '400px'
+                    ];
+                });
+
             $app->routes
                 ->add(['/s', '/s/'], [
                     [$app->bearCMS, 'disabledCheck'],

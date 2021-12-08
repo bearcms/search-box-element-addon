@@ -1,8 +1,8 @@
 <?php
 
 /*
- * Audits addon for Bear CMS
- * https://github.com/bearcms/audits-addon
+ * Search box element addon for Bear CMS
+ * https://github.com/bearcms/search-box-element-addon
  * Copyright (c) Amplilabs Ltd.
  * Free to use under the MIT license.
  */

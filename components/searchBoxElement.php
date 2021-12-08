@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * Search box element addon for Bear CMS
+ * https://github.com/bearcms/search-box-element-addon
+ * Copyright (c) Amplilabs Ltd.
+ * Free to use under the MIT license.
+ */
+
 use BearFramework\App;
 
 $app = App::get();

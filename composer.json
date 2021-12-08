@@ -21,7 +21,11 @@
         "bearframework/localization-addon": "1.*",
         "bearframework/tasks-addon": "1.*",
         "ivopetkov/html5-dom-document-php": "2.*",
-        "ivopetkov/data-index-bearframework-addon": "1.*"
+        "ivopetkov/data-index-bearframework-addon": "1.*",
+        "ivopetkov/client-packages-bearframework-addon": "1.*",
+        "ivopetkov/modal-windows-bearframework-addon": "1.*",
+        "ivopetkov/form-bearframework-addon": "1.*",
+        "ivopetkov/form-elements-bearframework-addon": "1.*"
     },
     "require-dev": {
         "bearcms/addon-tests": "1.*"
