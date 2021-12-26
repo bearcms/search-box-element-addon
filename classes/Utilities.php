@@ -307,6 +307,7 @@ class Utilities
         $app = App::get();
         $app->tasks->add('bearcms-search-update-index', null, [
             'id' => 'bearcms-search-update-index',
+            'startTime' => (time() + 5 * 60),
             'ignoreIfExists' => true
         ]);
     }
