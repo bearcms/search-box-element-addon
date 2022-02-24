@@ -302,12 +302,12 @@ class Utilities
         return ['status' => (int) $httpCode, 'content' => (string) $content];
     }
 
-    static function addIndexUpdateTask(): void
+    static function addIndexUpdateTask(int $delay = 0): void
     {
         $app = App::get();
         $app->tasks->add('bearcms-search-update-index', null, [
             'id' => 'bearcms-search-update-index',
-            'startTime' => (time() + 5 * 60),
+            'startTime' => (time() + $delay),
             'ignoreIfExists' => true
         ]);
     }

@@ -150,7 +150,7 @@ $app->bearCMS->addons
             if ($enableService) {
                 $app->bearCMS
                     ->addEventListener('internalSitemapChange', function () {
-                        Utilities::addIndexUpdateTask();
+                        Utilities::addIndexUpdateTask(5 * 60);
                     });
             }
         };
