@@ -32,36 +32,38 @@ class Utilities
         $result = self::makeRequest($robotsURL);
         if ($result['status'] === 200) {
             $robotsLines = explode("\n", $result['content']);
-            $sitemapURL = null;
+            $sitemapURL = '';
             foreach ($robotsLines as $robotsLine) {
                 $robotsLine = strtolower(trim($robotsLine));
                 if (strpos($robotsLine, 'sitemap:') === 0) {
                     $sitemapURL = trim(substr($robotsLine, 8));
+                    break;
                 }
             }
-            if (strlen($sitemapURL) > 0) {
-                $result = self::makeRequest($sitemapURL);
-                if ($result['status'] === 200) {
-                    $dom = new DOMDocument();
-                    try {
-                        $dom->loadXML($result['content']);
-                        $elements = $dom->getElementsByTagName('url');
-                        if ($elements->length > 0) {
-                            $urls = [];
-                            foreach ($elements as $element) {
-                                $lastModDate = '';
-                                $lastmodElements = $element->getElementsByTagName('lastmod');
-                                if ($lastmodElements->length === 1) {
-                                    $lastModDate = $lastmodElements->item(0)->nodeValue;
-                                }
-                                $locationElements = $element->getElementsByTagName('loc');
-                                if ($locationElements->length === 1) {
-                                    $urls[$locationElements->item(0)->nodeValue] = $lastModDate;
-                                }
+            if (strlen($sitemapURL) === 0) {
+                $sitemapURL = $app->urls->get('/sitemap.xml');
+            }
+            $result = self::makeRequest($sitemapURL);
+            if ($result['status'] === 200) {
+                $dom = new DOMDocument();
+                try {
+                    $dom->loadXML($result['content']);
+                    $elements = $dom->getElementsByTagName('url');
+                    if ($elements->length > 0) {
+                        $urls = [];
+                        foreach ($elements as $element) {
+                            $lastModDate = '';
+                            $lastmodElements = $element->getElementsByTagName('lastmod');
+                            if ($lastmodElements->length === 1) {
+                                $lastModDate = $lastmodElements->item(0)->nodeValue;
+                            }
+                            $locationElements = $element->getElementsByTagName('loc');
+                            if ($locationElements->length === 1) {
+                                $urls[$locationElements->item(0)->nodeValue] = $lastModDate;
                             }
                         }
-                    } catch (\Exception $e) {
                     }
+                } catch (\Exception $e) {
                 }
             }
         }
