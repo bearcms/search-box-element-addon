@@ -17,6 +17,8 @@ $app->bearCMS->addons
         $addon->initialize = function (array $options = []) use ($app) {
             $context = $app->contexts->get(__DIR__);
 
+            \BearCMS\Internal\Config::$robotsTxtDisallow[] = '/s/';
+
             $enableService = isset($options['enableService']) ? $options['enableService'] : true;
 
             $context->assets
