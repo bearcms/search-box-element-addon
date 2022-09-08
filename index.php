@@ -123,7 +123,7 @@ $app->bearCMS->addons
                             }
                             $textContent = implode('<br><br>', $resultsHTML);
                         } else {
-                            $textContent = sprintf(__('bearcms/search-box-element-addon/no-results-found'), $query);
+                            $textContent = sprintf(__('bearcms/search-box-element-addon/no-results-found'), htmlspecialchars($query));
                         }
                         $content .= '<bearcms-text-element text="' . htmlentities('<br>' . $textContent) . '"/>';
                         $content .= '</body>';
