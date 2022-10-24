@@ -35,6 +35,8 @@ $app->bearCMS->addons
                     return include $context->dir . '/locales/bg.php';
                 });
 
+            Utilities::$enableService = $enableService;
+
             \BearCMS\Internal\ElementsTypes::add('searchBox', [
                 'componentSrc' => 'bearcms-search-box-element',
                 'componentFilename' => $context->dir . '/components/searchBoxElement.php'
@@ -155,5 +157,16 @@ $app->bearCMS->addons
                         Utilities::addIndexUpdateTask(5 * 60);
                     });
             }
+
+            $app->shortcuts
+                ->add('searchBoxElement', function () {
+                    return new class
+                    {
+                        public function isEnabled()
+                        {
+                            return Utilities::$enableService;
+                        }
+                    };
+                });
         };
     });

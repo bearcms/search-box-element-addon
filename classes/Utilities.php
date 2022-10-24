@@ -21,6 +21,12 @@ class Utilities
 
     /**
      * 
+     * @var boolean
+     */
+    static public $enableService = false;
+
+    /**
+     * 
      * @return void
      */
     static function updateIndex(): void
