@@ -42,27 +42,29 @@ $app->bearCMS->addons
                 'componentFilename' => $context->dir . '/components/searchBoxElement.php'
             ]);
 
-            \BearCMS\Internal\Themes::$elementsOptions['searchBox'] = function ($context, $idPrefix, $parentSelector) {
-                $group = $context->addGroup(__('bearcms/search-box-element-addon/Search box'));
+            \BearCMS\Internal\Themes::$elementsOptions['searchBox'] = function ($options, $idPrefix, $parentSelector, $context, $details) {
+                $group = $options->addGroup(__('bearcms/search-box-element-addon/Search box'));
 
                 $groupInput = $group->addGroup(__('bearcms/search-box-element-addon/Input'));
                 $groupInput->addOption($idPrefix . "SearchBoxInputCSS", "css", '', [
                     "cssTypes" => ["cssSize", "cssText", "cssTextShadow", "cssPadding", "cssMargin", "cssBackground", "cssBorder", "cssRadius", "cssShadow"],
+                    "cssOptions" => isset($details['cssOptions']) ? $details['cssOptions'] : [],
                     "cssOutput" => [
                         ["rule", $parentSelector . " .bearcms-search-box-element-input", "width:100%;display:inline-block;box-sizing:border-box;border:0;margin:0;padding:0;"],
                         ["selector", $parentSelector . " .bearcms-search-box-element-input"],
                     ],
-                    "value" => '{"height":"42px","font-family":"Arial","color":"#000000","font-size":"14px","line-height":"42px","padding-right":"15px","padding-left":"15px","width":"100%","background-color":"#ffffff","border-top":"1px solid #cccccc","border-right":"1px solid #cccccc","border-bottom":"1px solid #cccccc","border-left":"1px solid #cccccc","border-top-left-radius":"2px","border-top-right-radius":"2px","border-bottom-left-radius":"2px","border-bottom-right-radius":"2px"}'
+                    "defaultValue" => '{"height":"42px","font-family":"Arial","color":"#000000","font-size":"14px","line-height":"42px","padding-right":"15px","padding-left":"15px","width":"100%","background-color":"#ffffff","border-top":"1px solid #cccccc","border-right":"1px solid #cccccc","border-bottom":"1px solid #cccccc","border-left":"1px solid #cccccc","border-top-left-radius":"2px","border-top-right-radius":"2px","border-bottom-left-radius":"2px","border-bottom-right-radius":"2px"}'
                 ]);
 
                 $groupButton = $group->addGroup(__('bearcms/search-box-element-addon/Button'));
                 $groupButton->addOption($idPrefix . "SearchBoxButtonCSS", "css", '', [
                     "cssTypes" => ["cssSize", "cssBackground", "cssBorder", "cssRadius", "cssShadow"],
+                    "cssOptions" => isset($details['cssOptions']) ? $details['cssOptions'] : [],
                     "cssOutput" => [
                         ["rule", $parentSelector . " .bearcms-search-box-element-button", "box-sizing:border-box;display:block;text-decoration:none;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;position:absolute;right:0;cursor:pointer;"],
                         ["selector", $parentSelector . " .bearcms-search-box-element-button"]
                     ],
-                    "value" => '{"height":"42px","width":"42px","border-top-right-radius":"2px","border-bottom-right-radius":"2px","background-color":"#555","background-image":"url(addon:bearcms\/search-box-element-addon:assets\/icon.png)","background-position":"center center","background-repeat":"no-repeat","background-attachment":"scroll","background-size":"cover"}'
+                    "defaultValue" => '{"height":"42px","width":"42px","border-top-right-radius":"2px","border-bottom-right-radius":"2px","background-color":"#555","background-image":"url(addon:bearcms\/search-box-element-addon:assets\/icon.png)","background-position":"center center","background-repeat":"no-repeat","background-attachment":"scroll","background-size":"cover"}'
                 ]);
             };
 
