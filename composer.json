@@ -25,7 +25,7 @@
         "ivopetkov/client-packages-bearframework-addon": "1.*",
         "ivopetkov/modal-windows-bearframework-addon": "1.*",
         "ivopetkov/form-bearframework-addon": "1.*",
-        "ivopetkov/form-elements-bearframework-addon": "1.*"
+        "ivopetkov/form-elements-bearframework-addon": "2.*"
     },
     "require-dev": {
         "bearcms/addon-tests": "1.*"
