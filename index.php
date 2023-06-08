@@ -37,10 +37,8 @@ $app->bearCMS->addons
 
             Utilities::$enableService = $enableService;
 
-            \BearCMS\Internal\ElementsTypes::add('searchBox', [
-                'componentSrc' => 'bearcms-search-box-element',
-                'componentFilename' => $context->dir . '/components/searchBoxElement.php'
-            ]);
+            $type = new \BearCMS\Internal\ElementType('searchBox', 'bearcms-search-box-element', $context->dir . '/components/searchBoxElement.php');
+            \BearCMS\Internal\ElementsTypes::add($type);
 
             \BearCMS\Internal\Themes::$elementsOptions['searchBox'] = function ($options, $idPrefix, $parentSelector, $context, $details) {
                 $group = $options->addGroup(__('bearcms/search-box-element-addon/Search box'));
