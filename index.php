@@ -38,33 +38,58 @@ $app->bearCMS->addons
             Utilities::$enableService = $enableService;
 
             $type = new \BearCMS\Internal\ElementType('searchBox', 'bearcms-search-box-element', $context->dir . '/components/searchBoxElement.php');
+            $type->canStyle = true;
+            $type->canImportExport = true;
             \BearCMS\Internal\ElementsTypes::add($type);
 
-            \BearCMS\Internal\Themes::$elementsOptions['searchBox'] = function ($options, $idPrefix, $parentSelector, $context, $details) {
-                $group = $options->addGroup(__('bearcms/search-box-element-addon/Search box'));
+            \BearCMS\Internal\Themes::$elementsOptions['searchBox'] = ['v1', function ($options, $idPrefix, $parentSelector, $context, $details) {
+                $isElementContext = $context === \BearCMS\Internal\Themes::OPTIONS_CONTEXT_ELEMENT;
+                if ($isElementContext) {
+                    $optionsGroup = $options;
+                    $defaultStyleSelector = '';
+                } else {
+                    $optionsGroup = $options->addGroup(__('bearcms/search-box-element-addon/Search box'));
+                    $defaultStyleSelector = ' .bearcms-element:not([class*="bearcms-element-style-"])';
+                    $optionsGroup->details['internalElementSelector'] = [$idPrefix, $parentSelector . " .bearcms-search-box-element"];
+                }
 
-                $groupInput = $group->addGroup(__('bearcms/search-box-element-addon/Input'));
+                $groupInput = $optionsGroup->addGroup(__('bearcms/search-box-element-addon/Input'));
                 $groupInput->addOption($idPrefix . "SearchBoxInputCSS", "css", '', [
                     "cssTypes" => ["cssSize", "cssText", "cssTextShadow", "cssPadding", "cssMargin", "cssBackground", "cssBorder", "cssRadius", "cssShadow"],
-                    "cssOptions" => isset($details['cssOptions']) ? $details['cssOptions'] : [],
+                    "cssOptions" => ["*/hoverState", "*/focusState", "*/activeState", "*/visibilityState", "*/sizeState", "*/screenSizeState", "*/pageTypeState", "*/tagsState"],
                     "cssOutput" => [
                         ["rule", $parentSelector . " .bearcms-search-box-element-input", "width:100%;display:inline-block;box-sizing:border-box;border:0;margin:0;padding:0;"],
-                        ["selector", $parentSelector . " .bearcms-search-box-element-input"],
+                        ["selector", $parentSelector . $defaultStyleSelector . "> .bearcms-search-box-element .bearcms-search-box-element-input"],
                     ],
                     "defaultValue" => '{"height":"42px","font-family":"Arial","color":"#000000","font-size":"14px","line-height":"42px","padding-right":"15px","padding-left":"15px","width":"100%","background-color":"#ffffff","border-top":"1px solid #cccccc","border-right":"1px solid #cccccc","border-bottom":"1px solid #cccccc","border-left":"1px solid #cccccc","border-top-left-radius":"2px","border-top-right-radius":"2px","border-bottom-left-radius":"2px","border-bottom-right-radius":"2px"}'
                 ]);
 
-                $groupButton = $group->addGroup(__('bearcms/search-box-element-addon/Button'));
+                $groupButton = $optionsGroup->addGroup(__('bearcms/search-box-element-addon/Button'));
                 $groupButton->addOption($idPrefix . "SearchBoxButtonCSS", "css", '', [
                     "cssTypes" => ["cssSize", "cssBackground", "cssBorder", "cssRadius", "cssShadow"],
-                    "cssOptions" => isset($details['cssOptions']) ? $details['cssOptions'] : [],
+                    "cssOptions" => ["*/hoverState", "*/focusState", "*/activeState", "*/visibilityState", "*/sizeState", "*/screenSizeState", "*/pageTypeState", "*/tagsState"],
                     "cssOutput" => [
                         ["rule", $parentSelector . " .bearcms-search-box-element-button", "box-sizing:border-box;display:block;text-decoration:none;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;position:absolute;right:0;cursor:pointer;"],
-                        ["selector", $parentSelector . " .bearcms-search-box-element-button"]
+                        ["selector", $parentSelector . $defaultStyleSelector . "> .bearcms-search-box-element .bearcms-search-box-element-button"]
                     ],
                     "defaultValue" => '{"height":"42px","width":"42px","border-top-right-radius":"2px","border-bottom-right-radius":"2px","background-color":"#555","background-image":"url(addon:bearcms\/search-box-element-addon:assets\/icon.png)","background-position":"center center","background-repeat":"no-repeat","background-attachment":"scroll","background-size":"cover"}'
                 ]);
-            };
+
+                $containerSelector = $defaultStyleSelector . ":has(> .bearcms-search-box-element)";
+                $groupContainer = $optionsGroup->addGroup(__("bearcms.themes.options.Container"));
+                $groupContainer->addOption($idPrefix . "SearchBoxContainerCSS", "css", '', [
+                    "cssTypes" => ["cssPadding", "cssMargin", "cssBorder", "cssRadius", "cssShadow", "cssBackground", "cssTextAlign", "cssSize", "cssTransform"],
+                    "cssOptions" => ["*/hoverState", "*/activeState", "*/visibilityState", "*/sizeState", "*/screenSizeState", "*/pageTypeState", "*/tagsState"],
+                    "cssOutput" => [
+                        ["rule", $parentSelector . $containerSelector, "box-sizing:border-box;"],
+                        ["selector", $parentSelector . $containerSelector]
+                    ]
+                ]);
+
+                if ($isElementContext) {
+                    $groupContainer->addVisibility($idPrefix . "SearchBoxContainerVisibility", $parentSelector . $containerSelector);
+                }
+            }];
 
             $app->clientPackages
                 ->add('-bearcms-search', function (IvoPetkov\BearFrameworkAddons\ClientPackage $package) {
