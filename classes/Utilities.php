@@ -301,7 +301,7 @@ class Utilities
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 20);
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
         curl_setopt($ch, CURLOPT_ENCODING, "gzip");
-        curl_setopt($ch, CURLOPT_USERAGENT, 'bearcms-audits-bot');
+        curl_setopt($ch, CURLOPT_USERAGENT, 'bearcms-search-bot');
         //    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
         //    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
         $content = curl_exec($ch);
