@@ -13,8 +13,8 @@ use BearFramework\App;
 $app = App::get();
 
 $app->bearCMS->addons
-    ->register('bearcms/search-box-element-addon', function (\BearCMS\Addons\Addon $addon) use ($app) {
-        $addon->initialize = function (array $options = []) use ($app) {
+    ->register('bearcms/search-box-element-addon', function (\BearCMS\Addons\Addon $addon) use ($app): void {
+        $addon->initialize = function (array $options = []) use ($app): void {
             $context = $app->contexts->get(__DIR__);
 
             \BearCMS\Internal\Config::$robotsTxtDisallow[] = '/s/';
@@ -42,7 +42,7 @@ $app->bearCMS->addons
             $type->canImportExport = true;
             \BearCMS\Internal\ElementsTypes::add($type);
 
-            \BearCMS\Internal\Themes::$elementsOptions['searchBox'] = ['v1', function ($options, $idPrefix, $parentSelector, $context, $details) {
+            \BearCMS\Internal\Themes::$elementsOptions['searchBox'] = ['v1', function ($options, $idPrefix, $parentSelector, $context, $details): void {
                 $isElementContext = $context === \BearCMS\Internal\Themes::OPTIONS_CONTEXT_ELEMENT;
                 if ($isElementContext) {
                     $optionsGroup = $options;
@@ -92,7 +92,7 @@ $app->bearCMS->addons
             }];
 
             $app->clientPackages
-                ->add('-bearcms-search', function (IvoPetkov\BearFrameworkAddons\ClientPackage $package) {
+                ->add('-bearcms-search', function (IvoPetkov\BearFrameworkAddons\ClientPackage $package): void {
                     //$js = file_get_contents(__DIR__ . '/dev/search.js');
                     $js = include __DIR__ . '/assets/search.min.js.php';
                     $package->addJSCode($js);
@@ -163,13 +163,13 @@ $app->bearCMS->addons
                 ]);
 
             $app->tasks
-                ->define('bearcms-search-update-index', function () use ($enableService) {
+                ->define('bearcms-search-update-index', function () use ($enableService): void {
                     if (!$enableService) {
                         return;
                     }
                     Utilities::updateIndex();
                 })
-                ->define('bearcms-search-update-page-index', function (string $path) use ($enableService) {
+                ->define('bearcms-search-update-page-index', function (string $path) use ($enableService): void {
                     if (!$enableService) {
                         return;
                     }
@@ -178,7 +178,7 @@ $app->bearCMS->addons
 
             if ($enableService) {
                 $app->bearCMS
-                    ->addEventListener('internalSitemapChange', function () {
+                    ->addEventListener('internalSitemapChange', function (): void {
                         Utilities::addIndexUpdateTask(5 * 60);
                     });
             }

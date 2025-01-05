@@ -214,9 +214,9 @@ class Utilities
                     $content = $crop($content, $contentMaxLength);
                 }
                 $results[$index] = ['url' => $url, 'title' => $title, 'content' => $content];
-                $value = sizeof(explode($loweredQuery, $loweredContent));
+                $value = count(explode($loweredQuery, $loweredContent));
                 $value--;
-                $positionValue = sizeof(explode($loweredQuery, $loweredTitle, 2));
+                $positionValue = count(explode($loweredQuery, $loweredTitle, 2));
                 $positionValue--;
                 $resultsOrder[$index] = $value + 5 * $positionValue;
                 $index++;
