@@ -21,7 +21,7 @@ $form->onSubmit = function ($values) use ($app) {
 echo '<html>';
 echo '<body>';
 
-echo '<form onsubmitsuccess="clientPackages.get(\'modalWindows\').then(function(m){m.closeAll();m.showLoading();});window.location.href=event.result;">';
+echo '<form onsubmitsuccess="clientPackages.get(\'modalWindows\').then(function(m){m.closeAll();m.showLoading();window.location.href=event.result;});">';
 echo '<form-element-textbox name="bearcms-search-input" placeholder="' . htmlentities(__('bearcms/search-box-element-addon/ModalWindow/SearchHint')) . '"/>';
 echo '<form-element-submit-button text="' . htmlentities(__('bearcms/search-box-element-addon/ModalWindow/SearchButton')) . '"/>';
 echo '</form>';
